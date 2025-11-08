@@ -31,9 +31,51 @@ export const REPORTS_DATA: Report[] = [
     { id: 2, type: 'imaging', title: 'Radiografía de Tórax', date: '2023-09-22T14:30:00Z', provider: 'Clínica Kennedy', url: '#' },
 ];
 
+// --- Dynamic Date Generation ---
+const toYYYYMMDD = (date: Date) => date.toISOString().split('T')[0];
+const today = new Date();
+const tomorrow = new Date();
+tomorrow.setDate(today.getDate() + 1);
+const dayAfterTomorrow = new Date();
+dayAfterTomorrow.setDate(today.getDate() + 2);
+const fiveDaysFromNow = new Date();
+fiveDaysFromNow.setDate(today.getDate() + 5);
+
 export const SPECIALISTS_DATA: Specialist[] = [
-    { id: 1, name: 'Dr. Juan Pérez', specialty: 'Cardiología', address: 'Av. del Bombero, Clínica Kennedy', phone: '0991234567', photoUrl: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16e?q=80&w=2070&auto=format&fit=crop', consultationFee: 60, biography: 'Cardiólogo con más de 15 años de experiencia en el diagnóstico y tratamiento de enfermedades cardiovasculares.', medicalCenterId: 'kennedy', availability: { '2024-07-29': ['09:00', '10:00', '11:00'], '2024-07-30': ['14:00', '15:00'] }, status: 'visible' },
-    { id: 2, name: 'Dra. Ana García', specialty: 'Dermatología', address: 'Av. del Bombero, Clínica Kennedy', phone: '0987654321', photoUrl: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?q=80&w=2070&auto=format&fit=crop', consultationFee: 50, biography: 'Especialista en dermatología clínica y estética, con enfoque en tratamientos de acné y rejuvenecimiento facial.', medicalCenterId: 'kennedy', availability: { '2024-07-29': ['08:30', '09:30'], '2024-07-31': ['10:30', '11:30', '12:30'] }, status: 'visible' },
+    { 
+        id: 1, 
+        name: 'Dr. Juan Pérez', 
+        specialty: 'Cardiología', 
+        address: 'Av. del Bombero, Clínica Kennedy', 
+        phone: '0991234567', 
+        photoUrl: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16e?q=80&w=2070&auto=format&fit=crop', 
+        consultationFee: 60, 
+        biography: 'Cardiólogo con más de 15 años de experiencia en el diagnóstico y tratamiento de enfermedades cardiovasculares.', 
+        medicalCenterId: 'kennedy', 
+        availability: { 
+            [toYYYYMMDD(today)]: ['09:00', '10:00', '11:00', '11:30'], 
+            [toYYYYMMDD(tomorrow)]: ['14:00', '15:00'],
+            [toYYYYMMDD(dayAfterTomorrow)]: ['09:00', '10:30'],
+        }, 
+        status: 'visible' 
+    },
+    { 
+        id: 2, 
+        name: 'Dra. Ana García', 
+        specialty: 'Dermatología', 
+        address: 'Av. del Bombero, Clínica Kennedy', 
+        phone: '0987654321', 
+        photoUrl: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?q=80&w=2070&auto=format&fit=crop', 
+        consultationFee: 50, 
+        biography: 'Especialista en dermatología clínica y estética, con enfoque en tratamientos de acné y rejuvenecimiento facial.', 
+        medicalCenterId: 'kennedy', 
+        availability: { 
+            [toYYYYMMDD(today)]: ['08:30', '09:30'], 
+            [toYYYYMMDD(tomorrow)]: ['10:30', '11:30', '12:30'],
+            [toYYYYMMDD(fiveDaysFromNow)]: ['14:00', '15:00', '16:00'],
+        }, 
+        status: 'visible' 
+    },
 ];
 
 export const MEDICAL_CENTERS: MedicalCenter[] = [
@@ -64,16 +106,6 @@ export let REFERRERS_DATA: Referrer[] = [
     { id: 1, name: 'Carlos Vera', email: 'cvera@example.com', phone: '0991234567', status: 'approved', referralCode: 'CARLOSA1B2', createdAt: new Date().toISOString(), activityStatus: 'active' },
     { id: 2, name: 'Ana Gomez', email: 'agomez@example.com', phone: '0987654321', status: 'pending', referralCode: 'ANAGB4C5', createdAt: new Date().toISOString(), activityStatus: 'active' }
 ];
-
-const today = new Date();
-const tomorrow = new Date();
-tomorrow.setDate(today.getDate() + 1);
-const dayAfterTomorrow = new Date();
-dayAfterTomorrow.setDate(today.getDate() + 2);
-const fiveDaysFromNow = new Date();
-fiveDaysFromNow.setDate(today.getDate() + 5);
-
-const toYYYYMMDD = (date: Date) => date.toISOString().split('T')[0];
 
 export let APPOINTMENTS_DATA: Appointment[] = [
     { id: 1, specialistId: 1, patientName: 'Elena Rodriguez', patientPhone: '0987654321', date: toYYYYMMDD(today), time: '09:00', status: 'agendada' },
