@@ -1,7 +1,13 @@
 import type { Offer, Coupon, CouponInstance, Service, Report, Specialist, MedicalCenter, Associate, ScheduleUser, Referrer, Appointment } from './types';
 
-// --- Dynamic Date Generation ---
-const toYYYYMMDD = (date: Date) => date.toISOString().split('T')[0];
+// --- Timezone-Safe Dynamic Date Generation ---
+const toLocalYYYYMMDD = (date: Date): string => {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+};
+
 const today = new Date();
 const tomorrow = new Date();
 tomorrow.setDate(today.getDate() + 1);
@@ -53,9 +59,9 @@ export const SPECIALISTS_DATA: Specialist[] = [
         biography: 'Cardiólogo con más de 15 años de experiencia en el diagnóstico y tratamiento de enfermedades cardiovasculares.', 
         medicalCenterId: 'kennedy', 
         availability: { 
-            [toYYYYMMDD(today)]: ['09:00', '10:00', '11:00', '11:30'], 
-            [toYYYYMMDD(tomorrow)]: ['14:00', '15:00'],
-            [toYYYYMMDD(dayAfterTomorrow)]: ['09:00', '10:30'],
+            [toLocalYYYYMMDD(today)]: ['09:00', '10:00', '11:00', '11:30'], 
+            [toLocalYYYYMMDD(tomorrow)]: ['14:00', '15:00'],
+            [toLocalYYYYMMDD(dayAfterTomorrow)]: ['09:00', '10:30'],
         }, 
         status: 'visible' 
     },
@@ -70,9 +76,9 @@ export const SPECIALISTS_DATA: Specialist[] = [
         biography: 'Especialista en dermatología clínica y estética, con enfoque en tratamientos de acné y rejuvenecimiento facial.', 
         medicalCenterId: 'kennedy', 
         availability: { 
-            [toYYYYMMDD(today)]: ['08:30', '09:30'], 
-            [toYYYYMMDD(tomorrow)]: ['10:30', '11:30', '12:30'],
-            [toYYYYMMDD(fiveDaysFromNow)]: ['14:00', '15:00', '16:00'],
+            [toLocalYYYYMMDD(today)]: ['08:30', '09:30'], 
+            [toLocalYYYYMMDD(tomorrow)]: ['10:30', '11:30', '12:30'],
+            [toLocalYYYYMMDD(fiveDaysFromNow)]: ['14:00', '15:00', '16:00'],
         }, 
         status: 'visible' 
     },
@@ -108,13 +114,13 @@ export let REFERRERS_DATA: Referrer[] = [
 ];
 
 export let APPOINTMENTS_DATA: Appointment[] = [
-    { id: 1, specialistId: 1, patientName: 'Elena Rodriguez', patientPhone: '0987654321', date: toYYYYMMDD(today), time: '09:00', status: 'agendada' },
-    { id: 2, specialistId: 2, patientName: 'Carlos Sanchez', patientPhone: '0991234567', date: toYYYYMMDD(today), time: '09:30', status: 'agendada' },
-    { id: 3, specialistId: 1, patientName: 'Sofia Martinez', patientPhone: '0988887777', date: toYYYYMMDD(today), time: '10:00', status: 'agendada' },
-    { id: 4, specialistId: 1, patientName: 'Luis Gonzalez', patientPhone: '0977776666', date: toYYYYMMDD(tomorrow), time: '11:00', status: 'agendada' },
-    { id: 5, specialistId: 2, patientName: 'Isabel Castillo', patientPhone: '0966665555', date: toYYYYMMDD(tomorrow), time: '12:30', status: 'agendada' },
-    { id: 6, specialistId: 2, patientName: 'Jorge Torres', patientPhone: '0955554444', date: toYYYYMMDD(dayAfterTomorrow), time: '08:30', status: 'agendada' },
-    { id: 7, specialistId: 1, patientName: 'Fernanda Diaz', patientPhone: '0944443333', date: toYYYYMMDD(fiveDaysFromNow), time: '15:00', status: 'agendada' },
+    { id: 1, specialistId: 1, patientName: 'Elena Rodriguez', patientPhone: '0987654321', date: toLocalYYYYMMDD(today), time: '09:00', status: 'agendada' },
+    { id: 2, specialistId: 2, patientName: 'Carlos Sanchez', patientPhone: '0991234567', date: toLocalYYYYMMDD(today), time: '09:30', status: 'agendada' },
+    { id: 3, specialistId: 1, patientName: 'Sofia Martinez', patientPhone: '0988887777', date: toLocalYYYYMMDD(today), time: '10:00', status: 'agendada' },
+    { id: 4, specialistId: 1, patientName: 'Luis Gonzalez', patientPhone: '0977776666', date: toLocalYYYYMMDD(tomorrow), time: '11:00', status: 'agendada' },
+    { id: 5, specialistId: 2, patientName: 'Isabel Castillo', patientPhone: '0966665555', date: toLocalYYYYMMDD(tomorrow), time: '12:30', status: 'agendada' },
+    { id: 6, specialistId: 2, patientName: 'Jorge Torres', patientPhone: '0955554444', date: toLocalYYYYMMDD(dayAfterTomorrow), time: '08:30', status: 'agendada' },
+    { id: 7, specialistId: 1, patientName: 'Fernanda Diaz', patientPhone: '0944443333', date: toLocalYYYYMMDD(fiveDaysFromNow), time: '15:00', status: 'agendada' },
 ];
 
 
