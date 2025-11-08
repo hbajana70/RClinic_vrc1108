@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import type { ScheduleUser } from '../types';
+// Fix: Import SPECIALISTS_DATA to populate the specialists dropdown.
 import { MEDICAL_CENTERS, SPECIALISTS_DATA } from '../constants';
 
 interface UserFormProps {
@@ -22,6 +23,7 @@ const UserForm: React.FC<UserFormProps> = ({ initialData, onSave, onCancel }) =>
             password: '',
             medicalCenterId: MEDICAL_CENTERS[0]?.id || '',
             status: 'visible',
+            // Fix: Add missing 'role' property to satisfy the ScheduleUser type.
             role: 'doctor',
             specialistId: undefined,
         };
@@ -31,7 +33,7 @@ const UserForm: React.FC<UserFormProps> = ({ initialData, onSave, onCancel }) =>
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
+        setFormData(prev => ({ ...prev, [name]: name === 'specialistId' ? (e.target.value ? Number(e.target.value) : undefined) : value }));
     };
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -83,6 +85,7 @@ const UserForm: React.FC<UserFormProps> = ({ initialData, onSave, onCancel }) =>
                     </div>
                 </div>
 
+                {/* Fix: Added UI fields for role and specialistId and grouped them with medicalCenterId. */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <label htmlFor="medicalCenterId" className="block text-sm font-medium text-gray-700">Centro Médico</label>
@@ -106,7 +109,7 @@ const UserForm: React.FC<UserFormProps> = ({ initialData, onSave, onCancel }) =>
                             name="specialistId"
                             id="specialistId"
                             value={formData.specialistId || ''}
-                            onChange={(e) => setFormData(prev => ({...prev, specialistId: e.target.value ? Number(e.target.value) : undefined}))}
+                            onChange={handleChange}
                             className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
                         >
                             <option value="">Ninguno</option>
@@ -121,7 +124,7 @@ const UserForm: React.FC<UserFormProps> = ({ initialData, onSave, onCancel }) =>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <label htmlFor="password" className="block text-sm font-medium text-gray-700">Contraseña</label>
-                        <input type="password" name="password" id="password" value={formData.password || ''} onChange={handleChange} required={!initialData} className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"/>
+                        <input type="password" name="password" id="password" value={formData.password} onChange={handleChange} required={!initialData} className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"/>
                         {initialData && <p className="text-xs text-gray-500 mt-1">Dejar en blanco para no cambiar la contraseña.</p>}
                     </div>
                     <div>
