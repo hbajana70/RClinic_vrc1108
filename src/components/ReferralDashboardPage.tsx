@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { RClinicLogo, KeyIcon, UserIcon, DocumentDuplicateIcon, BanknotesIcon, ChartBarIcon, UsersIcon } from './Icons';
+import { RClinicLogo, KeyIcon, DocumentDuplicateIcon, BanknotesIcon, ChartBarIcon, UsersIcon } from './Icons';
 import { REFERRERS_DATA } from '../constants';
 import type { Referrer } from '../types';
 

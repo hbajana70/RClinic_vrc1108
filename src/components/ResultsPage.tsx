@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { RClinicLogo, UserIcon, KeyIcon, CameraIcon, DocumentTextIcon } from './Icons';
 import { REPORTS_DATA } from '../constants';
-import type { Report } from '../types';
 
 type View = 'login' | 'selection' | 'imaging' | 'lab';
 
