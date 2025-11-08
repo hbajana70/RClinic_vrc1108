@@ -1,5 +1,15 @@
 import type { Offer, Coupon, CouponInstance, Service, Report, Specialist, MedicalCenter, Associate, ScheduleUser, Referrer, Appointment } from './types';
 
+// --- Dynamic Date Generation ---
+const toYYYYMMDD = (date: Date) => date.toISOString().split('T')[0];
+const today = new Date();
+const tomorrow = new Date();
+tomorrow.setDate(today.getDate() + 1);
+const dayAfterTomorrow = new Date();
+dayAfterTomorrow.setDate(today.getDate() + 2);
+const fiveDaysFromNow = new Date();
+fiveDaysFromNow.setDate(today.getDate() + 5);
+
 export const ALL_OFFERS_DATA: Offer[] = [
     { id: 1, icon: 'HeartIcon', highlight: 'Cardiología', category: 'Chequeo Preventivo', title: 'Evaluación Cardiovascular Completa', provider: 'Clínica Kennedy', price: 120.00, status: 'visible', placement: 'featured' },
     { id: 2, icon: 'EyeIcon', highlight: '25% Descuento', category: 'Oftalmología', title: 'Consulta y Medida de la Vista', provider: 'OmniHospital', price: 45.00, status: 'visible', placement: 'featured' },
@@ -30,16 +40,6 @@ export const REPORTS_DATA: Report[] = [
     { id: 1, type: 'lab', title: 'Biometría Hemática', date: '2023-10-15T10:00:00Z', provider: 'Interlab', url: '#' },
     { id: 2, type: 'imaging', title: 'Radiografía de Tórax', date: '2023-09-22T14:30:00Z', provider: 'Clínica Kennedy', url: '#' },
 ];
-
-// --- Dynamic Date Generation ---
-const toYYYYMMDD = (date: Date) => date.toISOString().split('T')[0];
-const today = new Date();
-const tomorrow = new Date();
-tomorrow.setDate(today.getDate() + 1);
-const dayAfterTomorrow = new Date();
-dayAfterTomorrow.setDate(today.getDate() + 2);
-const fiveDaysFromNow = new Date();
-fiveDaysFromNow.setDate(today.getDate() + 5);
 
 export const SPECIALISTS_DATA: Specialist[] = [
     { 
