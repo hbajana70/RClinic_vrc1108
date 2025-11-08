@@ -5,7 +5,14 @@ import type { Specialist } from '../types';
 
 type View = 'list' | 'schedule' | 'patient-data' | 'confirmation';
 
-// --- Utility function to format dates ---
+// --- Timezone-Safe Date Utilities ---
+const toLocalYYYYMMDD = (date: Date): string => {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+};
+
 const formatDate = (date: Date, options: Intl.DateTimeFormatOptions): string => {
     return date.toLocaleDateString('es-ES', options);
 };
@@ -32,12 +39,10 @@ const SpecialistResultsPage: React.FC = () => {
         setSearchParams({ ciudad, sector, especialidad });
 
         setTimeout(() => {
-            // Find medical center IDs that match the city and sector
             const matchingCenterIds = MEDICAL_CENTERS
                 .filter(mc => mc.status === 'visible' && mc.city === ciudad && (!sector || mc.sector === sector))
                 .map(mc => mc.id);
 
-            // Filter specialists based on specialty, status, and matching medical centers
             let results = SPECIALISTS_DATA.filter(s => 
                 s.status === 'visible' &&
                 (!especialidad || s.specialty === especialidad) &&
@@ -53,17 +58,17 @@ const SpecialistResultsPage: React.FC = () => {
     const handleSelectSpecialist = (specialist: Specialist) => {
         setSelectedSpecialist(specialist);
         
-        // Fix: Set an intelligent initial date to avoid side-effects in render.
-        // Find and set initial date to the first available slot.
-        const today = new Date();
-        const todayStr = today.toISOString().split('T')[0];
+        // **DEFINITIVE FIX:** Intelligently find and set the first available date.
+        // This logic runs *before* rendering the schedule view, ensuring data is ready.
+        const todayStr = toLocalYYYYMMDD(new Date());
         const sortedAvailableDates = Object.keys(specialist.availability)
             .filter(d => specialist.availability[d]?.length > 0)
             .sort();
+        
         const firstAvailableDate = sortedAvailableDates.find(date => date >= todayStr);
 
-        setSelectedDate(firstAvailableDate || todayStr); // Set to first available date, or today as fallback
-        setSelectedTime(''); // Reset time selection
+        setSelectedDate(firstAvailableDate || ''); // Set to first available date, or empty if none are in the future
+        setSelectedTime('');
         
         setView('schedule');
     };
@@ -165,7 +170,7 @@ const SpecialistResultsPage: React.FC = () => {
                     <h3 className="text-lg font-bold text-dark-blue">1. Selecciona una fecha</h3>
                     <div className="mt-4 grid grid-cols-3 gap-2 sm:grid-cols-4">
                         {dates.map(date => {
-                            const dateString = date.toISOString().split('T')[0];
+                            const dateString = toLocalYYYYMMDD(date);
                             return (
                                 <button key={dateString} onClick={() => { setSelectedDate(dateString); setSelectedTime(''); }} className={`p-2 rounded-lg text-center transition-colors ${selectedDate === dateString ? 'bg-primary text-white shadow-md' : 'bg-gray-100 hover:bg-gray-200'}`}>
                                     <p className="font-bold text-sm">{formatDate(date, { weekday: 'short' })}</p>
@@ -179,7 +184,7 @@ const SpecialistResultsPage: React.FC = () => {
                                 <CalendarIcon className="h-6 w-6 text-gray-600"/>
                                 <span className="text-xs mt-1 font-semibold text-gray-600">Más fechas</span>
                             </label>
-                           <input type="date" id="date-picker" className="sr-only" onChange={(e) => { setSelectedDate(e.target.value); setSelectedTime(''); }} min={today.toISOString().split('T')[0]} />
+                           <input type="date" id="date-picker" className="sr-only" onChange={(e) => { setSelectedDate(e.target.value); setSelectedTime(''); }} min={toLocalYYYYMMDD(today)} />
                         </div>
                     </div>
                 </div>
