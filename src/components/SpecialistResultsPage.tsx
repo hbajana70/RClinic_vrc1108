@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { RClinicLogo, MapPinIcon, CurrencyDollarIcon, CalendarIcon, CheckCircleIcon } from './Icons';
+import { RClinicLogo, MapPinIcon, PhoneIcon, ClockIcon, CurrencyDollarIcon, CalendarIcon, UserIcon, EnvelopeIcon, CheckCircleIcon } from './Icons';
 import { SPECIALISTS_DATA, MEDICAL_CENTERS } from '../constants';
-import type { Specialist } from '../types';
+import type { Specialist, MedicalCenter } from '../types';
 
 type View = 'list' | 'schedule' | 'patient-data' | 'confirmation';
 
@@ -52,6 +52,19 @@ const SpecialistResultsPage: React.FC = () => {
     // --- Event Handlers ---
     const handleSelectSpecialist = (specialist: Specialist) => {
         setSelectedSpecialist(specialist);
+        
+        // Fix: Set an intelligent initial date to avoid side-effects in render.
+        // Find and set initial date to the first available slot.
+        const today = new Date();
+        const todayStr = today.toISOString().split('T')[0];
+        const sortedAvailableDates = Object.keys(specialist.availability)
+            .filter(d => specialist.availability[d]?.length > 0)
+            .sort();
+        const firstAvailableDate = sortedAvailableDates.find(date => date >= todayStr);
+
+        setSelectedDate(firstAvailableDate || todayStr); // Set to first available date, or today as fallback
+        setSelectedTime(''); // Reset time selection
+        
         setView('schedule');
     };
     
@@ -137,10 +150,6 @@ const SpecialistResultsPage: React.FC = () => {
             date.setDate(today.getDate() + d);
             return date;
         });
-
-        if (!selectedDate) {
-            setSelectedDate(today.toISOString().split('T')[0]);
-        }
         
         const availableTimes = selectedSpecialist.availability[selectedDate] || [];
 
