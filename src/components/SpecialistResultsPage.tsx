@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { RClinicLogo, MapPinIcon, PhoneIcon, ClockIcon, CurrencyDollarIcon, CalendarIcon, UserIcon, EnvelopeIcon, CheckCircleIcon } from './Icons';
+import { RClinicLogo, MapPinIcon, CurrencyDollarIcon, CalendarIcon, CheckCircleIcon } from './Icons';
 import { SPECIALISTS_DATA, MEDICAL_CENTERS } from '../constants';
-import type { Specialist, MedicalCenter } from '../types';
+import type { Specialist } from '../types';
 
 type View = 'list' | 'schedule' | 'patient-data' | 'confirmation';
 
