@@ -1,5 +1,4 @@
 import React from 'react';
-import { ShieldCheckIcon, StethoscopeIcon } from './Icons';
 
 const About: React.FC = () => {
   return (
